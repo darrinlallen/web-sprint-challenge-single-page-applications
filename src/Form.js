@@ -6,7 +6,7 @@ import axios from 'axios'
 const schema = yup.object().shape({
   user: yup.string().min(2, 'name must be at least 2 characters'),
     size: yup.string(),
-    special: yup.string(),
+    instr: yup.string(),
     topping1: yup.bool(),
     topping2: yup.bool(),
     topping3: yup.bool(),
@@ -20,7 +20,7 @@ export default function MyForm() {
    const [form, setForm] = useState({
     user: '',
     size: '',
-    special : '',
+    instr : '',
     topping1: false,
     topping2: false,
     topping3: false,
@@ -29,7 +29,7 @@ export default function MyForm() {
    const [errors, setErrors] =   useState({
     user: '',
     size: '',
-    special: '',
+    instr: '',
     topping1: true,
     topping2: false,
     topping3: false,
@@ -50,13 +50,12 @@ export default function MyForm() {
 
   const submit = event => {
     event.preventDefault();
-    const newOrder = { user: '', size: '', mushroom: false, peperoni: false, bbq: false, hamburger: false
-    ,special: '' }
+    const newOrder = { user: form.user, size: form.size, instr: form.instr, topping1: form.topping1, topping2: form.topping2}
     axios.post('https://reqres.in/api/orders', newOrder)
     
     .then(res => {
-      setForm({ user: '', size: '', special: '', topping1: false, topping2: false, topping3: false, topping4: false
-      ,special: '' })
+      setForm({ user: '', size: '', instr: '', topping1: false, topping2: false, topping3: false, topping4: false
+       })
     })
     .catch(err => {
       debugger
@@ -77,16 +76,16 @@ useEffect(() => {
         <br/>
         <select id="size-dropdown">
 
-<option onChange={change} value={form.small} small>small</option>
+<option onChange={change} value="1" small>small</option>
 
-<option onChange={change} value={form.medium}>medium</option>
+<option onChange={change} value="2">medium</option>
 
-<option onChange={change} value={form.large}>large</option>
+<option onChange={change} value="3">large</option>
 
 </select>
 <br/>
 <label>enter instructions
-          <input onChange={change} type="text" id="special-text"  value={form.special}/>
+          <input onChange={change}  id="special-text" type="text" name="instr" value={form.instr}/>
         </label>
         <br/>
         <label>mushroom
@@ -102,7 +101,7 @@ useEffect(() => {
           <input onChange={change} checked={form.topping4} type="checkbox" name="topping4"/>
         </label>
         <br/>
-        <button disabled={disabled} id="order-pizza" type="submit">Add to order</button>
+        <button disabled={disabled} id="order-button" type="submit">Add to order</button>
       
       </form>
       </>
